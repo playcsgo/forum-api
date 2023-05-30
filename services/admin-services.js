@@ -9,6 +9,11 @@ const adminController = {
     })
       .then(restaurants => cb(null, { restaurants }))
       .catch(err => cb(err))
+  },
+  deleteRestaurant: (req, cb) => {
+    return Restaurant.destroy({ where: { id: req.params.id } })
+      .then(deletedRestaurant => cb(null, { restaurant: deletedRestaurant }))
+      .catch(err => cb(err))
   }
 }
 
