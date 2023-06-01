@@ -9,15 +9,7 @@ const categoryController = {
     categoryServices.postCategory(req, (err, data) => err ? next(err) : res.redirect('/admin/categories'))
   },
   putCategory: (req, res, next) => {
-    const { name } = req.body
-    if (!name) throw new Error('Category name is required')
-    return Category.findByPk(req.params.id)
-      .then(category => {
-        if (!category) throw new Error("Category doesn't exists!")
-        return category.update({ name })
-      })
-      .then(() => res.redirect('/admin/categories'))
-      .catch(err => next(err))
+    categoryServices.putCategory(req, (err, data) => err ? next(err) : res.redirect('/admin/categories'))
   },
   deletCategory: (req, res, next) => {
     return Category.destroy({ where: { id: req.params.id } })

@@ -18,7 +18,9 @@ router.patch('/users/:id', adminController.patchUser)
 router.get('/users', adminController.getUsers)
 
 // API Categories
+router.get('/categories/:id', categoryController.getCategories)
 router.get('/categories', categoryController.getCategories)
 router.post('/categories', categoryController.postCategory)
+router.put('/categories/:id', categoryController.putCategory)
 
 module.exports = router

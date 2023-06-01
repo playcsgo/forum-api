@@ -17,6 +17,17 @@ const categoryServices = {
     })
       .then(createdCategory => cb(null, { createdCategory }))
       .catch(err => cb(err))
+  },
+  putCategory: (req, cb) => {
+    const { name } = req.body
+    if (!name) throw new Error('Category name is required')
+    return Category.findByPk(req.params.id)
+      .then(category => {
+        if (!category) throw new Error("Category doesn't exists!")
+        return category.update({ name })
+      })
+      .then(updatedCategory => cb(null, { updatedCategory }))
+      .catch(err => cb(err))
   }
 }
 
