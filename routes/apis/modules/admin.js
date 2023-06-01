@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const upload = require('../../../middleware/multer')
 const adminController = require('../../../controllers/apis/admin-controller')
+const categoryController = require('../../../controllers/apis/category-controller')
 
 // Restaurant
 
@@ -12,8 +13,11 @@ router.get('/restaurants/:id/edit', adminController.editRestaurant)
 router.get('/restaurants/:id', adminController.getRestaurant)
 router.put('/restaurants/:id', upload.single('image'), adminController.putRestaurant)
 
-// API users
+// API Users
 router.patch('/users/:id', adminController.patchUser)
 router.get('/users', adminController.getUsers)
+
+// API Categories
+router.get('/categories', categoryController.getCategories)
 
 module.exports = router
