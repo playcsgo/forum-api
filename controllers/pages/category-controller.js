@@ -1,4 +1,4 @@
-const { Category } = require('../../models/category')
+const { Category } = require('../../models')
 const categoryServices = require('../../services/category-services')
 
 const categoryController = {
@@ -6,11 +6,7 @@ const categoryController = {
     categoryServices.getCategories(req, (err, data) => err ? next(err) : res.render('admin/categories', data))
   },
   postCategory: (req, res, next) => {
-    return Category.create({
-      name: req.body.name
-    })
-      .then(() => res.redirect('/admin/categories'))
-      .catch(err => next(err))
+    categoryServices.postCategory(req, (err, data) => err ? next(err) : res.redirect('/admin/categories'))
   },
   putCategory: (req, res, next) => {
     const { name } = req.body

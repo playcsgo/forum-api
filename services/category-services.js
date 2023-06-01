@@ -10,6 +10,13 @@ const categoryServices = {
         cb(null, { categories, category })
       })
       .catch(err => cb(err))
+  },
+  postCategory: (req, cb) => {
+    return Category.create({
+      name: req.body.name
+    })
+      .then(createdCategory => cb(null, { createdCategory }))
+      .catch(err => cb(err))
   }
 }
 

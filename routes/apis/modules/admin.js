@@ -19,5 +19,6 @@ router.get('/users', adminController.getUsers)
 
 // API Categories
 router.get('/categories', categoryController.getCategories)
+router.post('/categories', categoryController.postCategory)
 
 module.exports = router
