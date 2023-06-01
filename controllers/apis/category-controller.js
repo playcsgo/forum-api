@@ -9,6 +9,9 @@ const categoryController = {
   },
   putCategory: (req, res, next) => {
     categoryServices.putCategory(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
+  },
+  deletCategory: (req, res, next) => {
+    categoryServices.deletCategory(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
   }
 }
 

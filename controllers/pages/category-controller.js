@@ -1,4 +1,3 @@
-const { Category } = require('../../models')
 const categoryServices = require('../../services/category-services')
 
 const categoryController = {
@@ -12,12 +11,7 @@ const categoryController = {
     categoryServices.putCategory(req, (err, data) => err ? next(err) : res.redirect('/admin/categories'))
   },
   deletCategory: (req, res, next) => {
-    return Category.destroy({ where: { id: req.params.id } })
-      .then(category => {
-        if (!category) throw new Error('沒這項')
-        res.redirect('/admin/categories')
-      })
-      .catch(err => next(err))
+    categoryServices.deletCategory(req, (err, data) => err ? next(err) : res.redirect('/admin/categories'))
   }
 }
 

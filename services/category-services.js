@@ -28,6 +28,15 @@ const categoryServices = {
       })
       .then(updatedCategory => cb(null, { updatedCategory }))
       .catch(err => cb(err))
+  },
+  deletCategory: (req, cb) => {
+    return Category.findByPk(req.params.id)
+      .then(deletedCategory => {
+        if (!deletedCategory) throw new Error('沒這項')
+        deletedCategory.destroy()
+        cb(null, { deletedCategory })
+      })
+      .catch(err => cb(err))
   }
 }
 
