@@ -1,4 +1,4 @@
-const { User, Category } = require('../../models')
+const { Category } = require('../../models')
 
 const adminServices = require('../../services/admin-services')
 
@@ -44,20 +44,11 @@ const adminController = {
     adminServices.getUsers(req, (err, data) => err ? next(err) : res.render('admin/users', data))
   },
   patchUser: (req, res, next) => {
-    return User.findByPk(req.params.id)
-      .then(user => {
-        if (!user) throw new Error('沒這人')
-        if (user.email === 'root@example.com') {
-          req.flash('error_messages', '禁止變更 root 權限')
-          return res.redirect('back')
-        }
-        return user.update({ isAdmin: !user.isAdmin })
-      })
-      .then(() => {
-        req.flash('success_messages', '使用者權限變更成功')
-        return res.redirect('/admin/users')
-      })
-      .catch(err => next(err))
+    adminServices.patchUser(req, (err, data) => {
+      if (err) return next(err)
+      req.flash('success_messages', '使用者權限變更成功')
+      res.redirect('/admin/users')
+    })
   }
 }
 

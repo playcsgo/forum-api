@@ -94,6 +94,22 @@ const adminController = {
         cb(null, { users })
       })
       .catch(err => cb(err))
+  },
+  patchUser: (req, cb) => {
+    return User.findByPk(req.params.id)
+      .then(user => {
+        if (!user) throw new Error('沒這人')
+        if (user.email === 'root@example.com') {
+          req.flash('error_messages', '禁止變更 root 權限')
+          return cb(null, 'back')
+        }
+        return user.update({ isAdmin: !user.isAdmin })
+      })
+      .then(updatedUser => {
+        req.flash('success_messages', '使用者權限變更成功')
+        return cb(null, { updatedUser })
+      })
+      .catch(err => cb(err))
   }
 }
 

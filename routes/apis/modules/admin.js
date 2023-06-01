@@ -13,6 +13,7 @@ router.get('/restaurants/:id', adminController.getRestaurant)
 router.put('/restaurants/:id', upload.single('image'), adminController.putRestaurant)
 
 // API users
+router.patch('/users/:id', adminController.patchUser)
 router.get('/users', adminController.getUsers)
 
 module.exports = router
