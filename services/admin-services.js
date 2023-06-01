@@ -35,6 +35,18 @@ const adminController = {
     return Restaurant.destroy({ where: { id: req.params.id } })
       .then(deletedRestaurant => cb(null, { restaurant: deletedRestaurant }))
       .catch(err => cb(err))
+  },
+  getRestaurant: (req, cb) => {
+    return Restaurant.findByPk(req.params.id, {
+      raw: true,
+      nest: true,
+      include: [Category]
+    })
+      .then(restaurant => {
+        if (!restaurant) throw new Error("Restaurant didn't exist!")
+        cb(null, { restaurant })
+      })
+      .catch(err => cb(err))
   }
 }
 
