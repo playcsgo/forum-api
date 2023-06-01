@@ -47,6 +47,17 @@ const adminController = {
         cb(null, { restaurant })
       })
       .catch(err => cb(err))
+  },
+  editRestaurant: (req, cb) => {
+    Promise.all([
+      Restaurant.findByPk(req.params.id, { raw: true }),
+      Category.findAll({ raw: true })
+    ])
+      .then(([restaurant, categories]) => {
+        if (!restaurant) throw new Error('沒這間')
+        cb(null, { restaurant, categories })
+      })
+      .catch(err => cb(err))
   }
 }
 

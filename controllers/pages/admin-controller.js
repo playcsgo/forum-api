@@ -29,15 +29,7 @@ const adminController = {
     })
   },
   editRestaurant: (req, res, next) => {
-    Promise.all([
-      Restaurant.findByPk(req.params.id, { raw: true }),
-      Category.findAll({ raw: true })
-    ])
-      .then(([restaurant, categories]) => {
-        if (!restaurant) throw new Error('沒這間')
-        res.render('admin/edit-restaurant', { restaurant, categories })
-      })
-      .catch(err => next(err))
+    adminServices.editRestaurant(req, (err, data) => err ? next(err) : res.render('admin/edit-restaurant', data))
   },
   putRestaurant: (req, res, next) => {
     const { name, tel, address, openingHours, description, categoryId } = req.body
