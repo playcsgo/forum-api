@@ -1,4 +1,4 @@
-const { Restaurant, Category } = require('../models')
+const { User, Restaurant, Category } = require('../models')
 const { imgurFileHandler } = require('../helpers/file-helpers')
 
 const adminController = {
@@ -83,6 +83,15 @@ const adminController = {
       .then(updatedRestaurant => {
         req.flash('success_messages', 'restaurant was successfully to update')
         cb(null, { updatedRestaurant })
+      })
+      .catch(err => cb(err))
+  },
+  getUsers: (req, cb) => {
+    return User.findAll({
+      raw: true
+    })
+      .then(users => {
+        cb(null, { users })
       })
       .catch(err => cb(err))
   }

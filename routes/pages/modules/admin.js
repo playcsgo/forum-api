@@ -4,6 +4,7 @@ const adminController = require('../../../controllers/pages/admin-controller')
 const upload = require('../../../middleware/multer')
 const categoryController = require('../../../controllers/pages/category-controller')
 
+// pages Restaurant
 router.get('/restaurants/create', adminController.createRestaurant)
 router.get('/restaurants/:id/edit', adminController.editRestaurant)
 router.put('/restaurants/:id', upload.single('image'), adminController.putRestaurant)
@@ -12,6 +13,7 @@ router.get('/restaurants/:id', adminController.getRestaurant)
 router.get('/restaurants', adminController.getRestaurants)
 router.post('/restaurants', upload.single('image'), adminController.postRestaurant)
 
+// pages Users
 router.patch('/users/:id', adminController.patchUser)
 router.get('/users', adminController.getUsers)
 
