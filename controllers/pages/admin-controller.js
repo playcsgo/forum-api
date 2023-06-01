@@ -1,5 +1,4 @@
-const { Restaurant, User, Category } = require('../../models')
-const { imgurFileHandler } = require('../../helpers/file-helpers')
+const { User, Category } = require('../../models')
 
 const adminServices = require('../../services/admin-services')
 
@@ -32,20 +31,11 @@ const adminController = {
     adminServices.editRestaurant(req, (err, data) => err ? next(err) : res.render('admin/edit-restaurant', data))
   },
   putRestaurant: (req, res, next) => {
-    const { name, tel, address, openingHours, description, categoryId } = req.body
-    if (!name) throw new Error('沒這間')
-    const { file } = req
-    return imgurFileHandler(file)
-      .then(filePath =>
-        Restaurant.update(
-          { name, tel, address, openingHours, description, image: filePath, categoryId },
-          { where: { id: req.params.id } }
-        ))
-      .then(() => {
-        req.flash('success_message', 'restaurant was successfully to update')
-        res.redirect('/admin/restaurants')
-      })
-      .catch(err => next(err))
+    adminServices.putRestaurant(req, (err, data) => {
+      if (err) return next(err)
+      req.flash('success_message', 'restaurant was successfully to update')
+      res.redirect('/admin/restaurants')
+    })
   },
   deleteRestaurant: (req, res, next) => {
     adminServices.deleteRestaurant(req, (err, data) => err ? next(err) : res.redirect('/admin/restaurants', data))
