@@ -6,7 +6,7 @@ const userServices = {
     cb(null)
   },
   signInPage: (req, cb) => {
-    cb()
+    cb(null)
   },
   signUp: (req, cb) => {
     if (req.body.password !== req.body.passwordCheck) throw new Error('Password do not match!')
@@ -28,7 +28,14 @@ const userServices = {
   },
   signIn: (req, cb) => {
     // req.flash('success_messages', '成功登入')
-    cb()
+    cb(null)
+  },
+  logout: (req, cb) => {
+    req.flash('success_messages', '你已成功登出')
+    req.logout(err => {
+      if (err) console.error(err)
+    })
+    return cb(null)
   }
 }
 

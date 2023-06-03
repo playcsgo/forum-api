@@ -23,12 +23,13 @@ const userController = {
       res.redirect('/restaurants')
     })
   },
-  logout: (req, res) => {
-    req.flash('success_messages', '你已成功登出')
-    req.logout(err => {
-      if (err) console.error(err)
+  logout: (req, res, next) => {
+    userServices.logout(req, (err, data) => {
+      if (err) return next(err)
+      // flash出不來
+      req.flash('success_messages', '你已成功登出')
+      res.redirect('/signin')
     })
-    return res.redirect('/signin')
   },
   getUser: (req, res, next) => {
     return Promise.all([
