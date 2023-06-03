@@ -19,10 +19,11 @@ router.post('/signup', userController.signUp)
 // Restaurant
 router.get('/restaurants', authenticated, restController.getRestaurants)
 
-// admin Error Handler
-router.use('/', apiErrorHandler)
-
 // Comment
 router.post('/comments', authenticated, commentController.postComment)
+router.delete('/comments/:id', authenticated, commentController.deleteComment)
+
+// admin Error Handler
+router.use('/', apiErrorHandler)
 
 module.exports = router

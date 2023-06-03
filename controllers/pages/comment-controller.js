@@ -9,13 +9,7 @@ const commentController = {
     })
   },
   deleteComment: (req, res, next) => {
-    return Comment.findByPk(req.params.id)
-      .then(comment => {
-        if (!comment) throw new Error('不用刪了')
-        return comment.destroy()
-      })
-      .then(deletedComment => res.redirect(`/restaurants/${deletedComment.restaurantId}`))
-      .catch(err => next(err))
+    commentService.deleteComment(req, (err, data) => err ? next(err) : res.redirect(`/restaurants/${data.restaurantId}`))
   }
 }
 

@@ -21,6 +21,15 @@ const commentService = {
       })
       .then(createdcomment => cb(null, { createdcomment }))
       .catch(err => cb(err))
+  },
+  deleteComment: (req, cb) => {
+    return Comment.findByPk(req.params.id)
+      .then(comment => {
+        if (!comment) throw new Error('不用刪了')
+        return comment.destroy()
+      })
+      .then(deletedComment => cb(null, deletedComment))
+      .catch(err => cb(err))
   }
 }
 
