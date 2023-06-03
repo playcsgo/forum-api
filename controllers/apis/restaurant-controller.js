@@ -1,4 +1,3 @@
-
 const restaurantServices = require('../../services/restaurant-services')
 
 const restaurantColler = {
@@ -13,6 +12,9 @@ const restaurantColler = {
   },
   getFeeds: (req, res, next) => {
     restaurantServices.getFeeds(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
+  },
+  getTopRestaurants: (req, res, next) => {
+    restaurantServices.getTopRestaurants(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
   }
 }
 

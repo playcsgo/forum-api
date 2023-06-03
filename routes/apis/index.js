@@ -17,6 +17,7 @@ router.post('/signin', passport.authenticate('local', { session: false }), userC
 router.post('/signup', userController.signUp)
 
 // Restaurant
+router.get('/restaurants/top', restController.getTopRestaurants)
 router.get('/restaurants/feeds', restController.getFeeds)
 router.get('/restaurants/:id/dashboard', restController.getDashboard)
 router.get('/restaurants/:id', authenticated, restController.getRestaurant)

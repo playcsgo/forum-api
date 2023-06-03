@@ -1,5 +1,3 @@
-const { Restaurant, User } = require('../../models')
-
 const restaurantServices = require('../../services/restaurant-services')
 
 const restaurantColler = {
@@ -23,23 +21,7 @@ const restaurantColler = {
     restaurantServices.getFeeds(req, (err, data) => err ? next(err) : res.render('feeds', { restaurants: data.restaurants, comments: data.comments }))
   },
   getTopRestaurants: (req, res, next) => {
-    return Restaurant.findAll({
-      include: [{ model: User, as: 'FavoritedUsers' }],
-      // raw: true,
-      // nest: true, 格式會不樣. FavoritedUsers 這個會是 { } 而不是 [ ]
-      limit: 10
-    })
-      .then(restaurants => {
-        restaurants = restaurants.map(r => ({
-          ...r.toJSON(),
-          favoritedCount: r.FavoritedUsers.length,
-          isFavorited: req.user && req.user.FavoritedRestaurants.some(f => f.id === r.id)
-          // description: r.description.substring(0, 40)
-        }))
-        restaurants.sort((a, b) => b.favoritedCount - a.favoritedCount)
-        return res.render('top-restaurants', { restaurants })
-      })
-      .catch(err => next(err))
+    restaurantServices.getTopRestaurants(req, (err, data) => err ? next(err) : res.render('top-restaurants', data))
   }
 }
 
