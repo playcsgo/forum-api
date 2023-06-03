@@ -1,6 +1,5 @@
 // const bcrypt = require('bcryptjs')
 const { User, Restaurant, Favorite, Like, Followship } = require('../../models')
-const { imgurFileHandler } = require('../../helpers/file-helpers')
 const userServices = require('../../services/user-services')
 const userController = {
   signUpPage: (req, res) => {
@@ -46,26 +45,11 @@ const userController = {
     //   .catch(err => next(err))
   },
   putUser: (req, res, next) => {
-    if (req.user.id !== Number(req.params.id)) throw new Error('不要改別人的')
-    const { name } = req.body
-    const { file } = req
-    if (!name) throw new Error('name要填')
-    return Promise.all([
-      imgurFileHandler(file),
-      User.findByPk(req.user.id)
-    ])
-      .then(([filePath, user]) => {
-        if (!user) throw new Error('見鬼了')
-        return user.update({
-          name,
-          image: filePath || user.image
-        })
-      })
-      .then(() => {
-        req.flash('success_messages', '使用者資料編輯成功')
-        res.redirect(`/users/${req.user.id}`)
-      })
-      .catch(err => next(err))
+    userServices.putUser(req, (err, data) => {
+      if (err) return next(err)
+      req.flash('success_messages', '使用者資料編輯成功')
+      res.redirect(`/users/${data.updatedUser.id}`)
+    })
   },
   addFavorite: (req, res, next) => {
     const { restaurantId } = req.params

@@ -1,5 +1,6 @@
 const { User, Restaurant, Comment } = require('../models')
 const bcrypt = require('bcryptjs')
+const { imgurFileHandler } = require('../helpers/file-helpers')
 
 const userServices = {
   signUpPage: (req, cb) => {
@@ -71,6 +72,28 @@ const userServices = {
       .then(user => {
         if (!user) throw new Error('沒這人')
         cb(null, { user })
+      })
+      .catch(err => cb(err))
+  },
+  putUser: (req, cb) => {
+    if (req.user.id !== Number(req.params.id)) throw new Error('不要改別人的')
+    const { name } = req.body
+    const { file } = req
+    if (!name) throw new Error('name要填')
+    return Promise.all([
+      imgurFileHandler(file),
+      User.findByPk(req.user.id)
+    ])
+      .then(([filePath, user]) => {
+        if (!user) throw new Error('見鬼了')
+        return user.update({
+          name,
+          image: filePath || user.image
+        })
+      })
+      .then(updatedUser => {
+        req.flash('success_messages', '使用者資料編輯成功')
+        cb(null, { updatedUser })
       })
       .catch(err => cb(err))
   }
