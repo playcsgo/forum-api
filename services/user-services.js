@@ -1,4 +1,4 @@
-const { User } = require('../models')
+const { User, Restaurant, Comment } = require('../models')
 const bcrypt = require('bcryptjs')
 
 const userServices = {
@@ -36,6 +36,33 @@ const userServices = {
       if (err) console.error(err)
     })
     return cb(null)
+  },
+  getUser: (req, cb) => {
+    return Promise.all([
+      User.findByPk(req.params.id, {
+        include: [
+          { model: Restaurant, as: 'FavoritedRestaurants' },
+          { model: User, as: 'Followers' },
+          { model: User, as: 'Followings' }
+        ]
+      }),
+      Comment.findAndCountAll({
+        include: Restaurant,
+        where: { user_id: req.params.id },
+        nest: true,
+        raw: true
+      })
+    ])
+      .then(([user, comments]) => {
+        user = {
+          ...user.toJSON(),
+          favoritedCount: user.FavoritedRestaurants.length,
+          followingsCount: user.Followings.length,
+          followersCount: user.Followers.length
+        }
+        cb(null, { user, comments })
+      })
+      .catch(err => cb(err))
   }
 }
 

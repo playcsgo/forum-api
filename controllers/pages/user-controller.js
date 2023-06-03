@@ -1,5 +1,5 @@
 // const bcrypt = require('bcryptjs')
-const { User, Comment, Restaurant, Favorite, Like, Followship } = require('../../models')
+const { User, Restaurant, Favorite, Like, Followship } = require('../../models')
 const { imgurFileHandler } = require('../../helpers/file-helpers')
 const userServices = require('../../services/user-services')
 const userController = {
@@ -32,31 +32,32 @@ const userController = {
     })
   },
   getUser: (req, res, next) => {
-    return Promise.all([
-      User.findByPk(req.params.id, {
-        include: [
-          { model: Restaurant, as: 'FavoritedRestaurants' },
-          { model: User, as: 'Followers' },
-          { model: User, as: 'Followings' }
-        ]
-      }),
-      Comment.findAndCountAll({
-        include: Restaurant,
-        where: { user_id: req.params.id },
-        nest: true,
-        raw: true
-      })
-    ])
-      .then(([user, comments]) => {
-        user = {
-          ...user.toJSON(),
-          favoritedCount: user.FavoritedRestaurants.length,
-          followingsCount: user.Followings.length,
-          followersCount: user.Followers.length
-        }
-        res.render('users/profile', { user, comments })
-      })
-      .catch(err => next(err))
+    userServices.getUser(req, (err, data) => err ? next(err) : res.render('users/profile', { user: data.user, comments: data.comments }))
+    // return Promise.all([
+    //   User.findByPk(req.params.id, {
+    //     include: [
+    //       { model: Restaurant, as: 'FavoritedRestaurants' },
+    //       { model: User, as: 'Followers' },
+    //       { model: User, as: 'Followings' }
+    //     ]
+    //   }),
+    //   Comment.findAndCountAll({
+    //     include: Restaurant,
+    //     where: { user_id: req.params.id },
+    //     nest: true,
+    //     raw: true
+    //   })
+    // ])
+    //   .then(([user, comments]) => {
+    //     user = {
+    //       ...user.toJSON(),
+    //       favoritedCount: user.FavoritedRestaurants.length,
+    //       followingsCount: user.Followings.length,
+    //       followersCount: user.Followers.length
+    //     }
+    //     res.render('users/profile', { user, comments })
+    //   })
+    //   .catch(err => next(err))
   },
   editUser: (req, res, next) => {
     return User.findByPk(req.params.id, {
