@@ -3,6 +3,9 @@ require('dotenv').config()
 const userServices = require('../../services/user-services')
 
 const userController = {
+  signUpPage: (req, res, next) => {
+    userServices.signUpPage(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
+  },
   signIn: (req, res, next) => {
     try {
       const userData = req.user.toJSON()

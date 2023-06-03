@@ -13,6 +13,7 @@ const commentController = require('../../controllers/apis/comment-controller')
 router.use('/admin', authenticated, authenticatedAdmin, admin)
 
 // User
+router.get('/signup', userController.signUpPage) // 居然要放post前面  神奇
 router.post('/signin', passport.authenticate('local', { session: false }), userController.signIn) // 新增這行，設定 session: false
 router.post('/signup', userController.signUp)
 
