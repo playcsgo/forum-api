@@ -42,6 +42,9 @@ const userController = {
   },
   putUser: (req, res, next) => {
     userServices.putUser(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
+  },
+  addFavorite: (req, res, next) => {
+    userServices.addFavorite(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
   }
 }
 module.exports = userController

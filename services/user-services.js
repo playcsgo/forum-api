@@ -1,4 +1,4 @@
-const { User, Restaurant, Comment } = require('../models')
+const { User, Restaurant, Comment, Favorite } = require('../models')
 const bcrypt = require('bcryptjs')
 const { imgurFileHandler } = require('../helpers/file-helpers')
 
@@ -95,6 +95,29 @@ const userServices = {
         req.flash('success_messages', '使用者資料編輯成功')
         cb(null, { updatedUser })
       })
+      .catch(err => cb(err))
+  },
+  addFavorite: (req, cb) => {
+    const { restaurantId } = req.params
+    return Promise.all([
+      // 要先反查是否已經加入了, 已經有就跳出
+      Restaurant.findByPk(restaurantId),
+      Favorite.findOne({
+        where: {
+          userId: req.user.id,
+          restaurantId
+        }
+      })
+    ])
+      .then(([restaurant, favorite]) => {
+        if (!restaurant) throw new Error('沒這間')
+        if (favorite) throw new Error('是要加幾次?')
+        return Favorite.create({
+          userId: req.user.id,
+          restaurantId
+        })
+      })
+      .then(createdFavorite => cb(null, { createdFavorite }))
       .catch(err => cb(err))
   }
 }

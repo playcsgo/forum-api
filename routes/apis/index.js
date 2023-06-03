@@ -22,7 +22,9 @@ router.get('/users/:id', authenticated, userController.getUser)
 router.post('/signin', passport.authenticate('local', { session: false }), userController.signIn) // 新增這行，設定 session: false
 router.post('/signup', userController.signUp)
 router.put('/users/:id', authenticated, upload.single('image'), userController.putUser)
-// router.put('/users/:id', authenticated, upload.single('image'), userController.putUser)
+
+// Favorites
+router.post('/favorite/:restaurantId', authenticated, userController.addFavorite)
 
 // Restaurant
 router.get('/restaurants/top', restController.getTopRestaurants)

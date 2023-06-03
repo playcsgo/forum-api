@@ -35,14 +35,6 @@ const userController = {
   },
   editUser: (req, res, next) => {
     userServices.editUser(req, (err, data) => err ? next(err) : res.render('users/edit', data))
-    // return User.findByPk(req.params.id, {
-    //   raw: true
-    // })
-    //   .then(user => {
-    //     if (!user) throw new Error('沒這人')
-    //     res.render('users/edit', { user })
-    //   })
-    //   .catch(err => next(err))
   },
   putUser: (req, res, next) => {
     userServices.putUser(req, (err, data) => {
@@ -52,27 +44,7 @@ const userController = {
     })
   },
   addFavorite: (req, res, next) => {
-    const { restaurantId } = req.params
-    return Promise.all([
-      // 要先反查是否已經加入了, 已經有就跳出
-      Restaurant.findByPk(restaurantId),
-      Favorite.findOne({
-        where: {
-          userId: req.user.id,
-          restaurantId
-        }
-      })
-    ])
-      .then(([restaurant, favorite]) => {
-        if (!restaurant) throw new Error('沒這間')
-        if (favorite) throw new Error('是要加幾次?')
-        return Favorite.create({
-          userId: req.user.id,
-          restaurantId
-        })
-      })
-      .then(() => res.redirect('back'))
-      .catch(err => next(err))
+    userServices.addFavorite(req, (err, data) => err ? next(err) : res.redirect('back'))
   },
   removeFavorite: (req, res, next) => {
     return Favorite.findOne({
