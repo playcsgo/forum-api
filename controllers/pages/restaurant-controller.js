@@ -24,7 +24,7 @@ const restaurantColler = {
       ]
     })
       .then(restaurant => {
-        if (!restaurant) throw new Error('沒這間')
+        if (!restaurant) throw new Error('沒這間 from getRestaurant')
         const isFavorited = restaurant.FavoritedUsers.some(f => f.id === req.user.id)
         const isLiked = restaurant.LikedUsers.some(l => l.id === req.user.id)
         restaurant.increment('viewCounts')

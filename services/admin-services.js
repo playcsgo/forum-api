@@ -25,9 +25,12 @@ const adminController = {
         image: filePath || null,
         categoryId
       }))
-      .then(nesRestaurant => {
+      .then(createRestaurant => {
         // req.flash('success_message', '建立成功') 這個只放在pages
-        cb(null, { restaurant: nesRestaurant })
+        // 看前端是要data.createRestaurant
+        // 還是直接data.xxxx  可能data.createRestaurant會比較好理解
+        // 如果不用 toJSON(), 就要使用大括號 { createRestaurant }
+        cb(null, createRestaurant.toJSON())
       })
       .catch(err => cb(err))
   },
