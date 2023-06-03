@@ -5,6 +5,9 @@ const userServices = {
   signUpPage: (req, cb) => {
     cb(null)
   },
+  signInPage: (req, cb) => {
+    cb()
+  },
   signUp: (req, cb) => {
     if (req.body.password !== req.body.passwordCheck) throw new Error('Password do not match!')
     return User.findOne({ where: { email: req.body.email } })
@@ -22,6 +25,10 @@ const userServices = {
         cb(null, { user })
       })
       .catch(err => cb(err))
+  },
+  signIn: (req, cb) => {
+    // req.flash('success_messages', '成功登入')
+    cb()
   }
 }
 

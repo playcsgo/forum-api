@@ -13,12 +13,15 @@ const userController = {
       res.redirect('/signin')
     })
   },
-  signInPage: (req, res) => {
-    res.render('signin')
+  signInPage: (req, res, next) => {
+    userServices.signInPage(req, (err, data) => err ? next(err) : res.render('signin'))
   },
-  signIn: (req, res) => {
-    req.flash('success_messages', '成功登入')
-    res.redirect('/restaurants')
+  signIn: (req, res, next) => {
+    userServices.signIn(req, (err, data) => {
+      if (err) return next(err)
+      req.flash('success_messages', '成功登入')
+      res.redirect('/restaurants')
+    })
   },
   logout: (req, res) => {
     req.flash('success_messages', '你已成功登出')

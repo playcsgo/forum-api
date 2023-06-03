@@ -6,6 +6,9 @@ const userController = {
   signUpPage: (req, res, next) => {
     userServices.signUpPage(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
   },
+  signInPage: (req, res, next) => {
+    userServices.signInPage(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
+  },
   signIn: (req, res, next) => {
     try {
       const userData = req.user.toJSON()
