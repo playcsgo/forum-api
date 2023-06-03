@@ -17,8 +17,10 @@ router.post('/signin', passport.authenticate('local', { session: false }), userC
 router.post('/signup', userController.signUp)
 
 // Restaurant
-router.get('/restaurants', authenticated, restController.getRestaurants)
+router.get('/restaurants/:id/dashboard', restController.getDashboard)
 router.get('/restaurants/:id', authenticated, restController.getRestaurant)
+router.get('/restaurants', authenticated, restController.getRestaurants)
+
 // Comment
 router.post('/comments', authenticated, commentController.postComment)
 router.delete('/comments/:id', authenticated, commentController.deleteComment)
