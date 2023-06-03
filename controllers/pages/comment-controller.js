@@ -1,4 +1,3 @@
-const { Comment } = require('../../models')
 const commentService = require('../../services/comment-srvices')
 
 const commentController = {

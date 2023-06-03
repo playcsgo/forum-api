@@ -18,7 +18,7 @@ router.post('/signup', userController.signUp)
 
 // Restaurant
 router.get('/restaurants', authenticated, restController.getRestaurants)
-
+router.get('/restaurants/:id', authenticated, restController.getRestaurant)
 // Comment
 router.post('/comments', authenticated, commentController.postComment)
 router.delete('/comments/:id', authenticated, commentController.deleteComment)

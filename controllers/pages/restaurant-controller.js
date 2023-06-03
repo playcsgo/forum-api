@@ -7,30 +7,31 @@ const restaurantColler = {
     restaurantServices.getRestaurants(req, (err, data) => err ? next(err) : res.render('restaurants', data))
   },
   getRestaurant: (req, res, next) => {
-    return Restaurant.findByPk(req.params.id, {
-      include: [
-        { model: Category, required: true },
-        { model: User, as: 'FavoritedUsers' },
-        { model: User, as: 'LikedUsers' },
-        {
-          model: Comment,
-          include: [
-            { model: User, required: true }
-          ],
-          order: [['created_at', 'DESC']],
-          required: false,
-          separate: true
-        }
-      ]
-    })
-      .then(restaurant => {
-        if (!restaurant) throw new Error('沒這間 from getRestaurant')
-        const isFavorited = restaurant.FavoritedUsers.some(f => f.id === req.user.id)
-        const isLiked = restaurant.LikedUsers.some(l => l.id === req.user.id)
-        restaurant.increment('viewCounts')
-        res.render('restaurant', { restaurant: restaurant.toJSON(), isFavorited, isLiked })
-      })
-      .catch(err => next(err))
+    restaurantServices.getRestaurant(req, (err, data) => err ? next(err) : res.render('restaurant', { restaurant: data.restaurant, isFavorited: data.isFavorited, isLiked: data.isLiked }))
+    // return Restaurant.findByPk(req.params.id, {
+    //   include: [
+    //     { model: Category, required: true },
+    //     { model: User, as: 'FavoritedUsers' },
+    //     { model: User, as: 'LikedUsers' },
+    //     {
+    //       model: Comment,
+    //       include: [
+    //         { model: User, required: true }
+    //       ],
+    //       order: [['created_at', 'DESC']],
+    //       required: false,
+    //       separate: true
+    //     }
+    //   ]
+    // })
+    //   .then(restaurant => {
+    //     if (!restaurant) throw new Error('沒這間 from getRestaurant')
+    //     const isFavorited = restaurant.FavoritedUsers.some(f => f.id === req.user.id)
+    //     const isLiked = restaurant.LikedUsers.some(l => l.id === req.user.id)
+    //     restaurant.increment('viewCounts')
+    //     res.render('restaurant', { restaurant: restaurant.toJSON(), isFavorited, isLiked })
+    //   })
+    //   .catch(err => next(err))
   },
   getDashboard: (req, res, next) => {
     return Promise.all([
