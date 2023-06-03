@@ -33,41 +33,17 @@ const userController = {
   },
   getUser: (req, res, next) => {
     userServices.getUser(req, (err, data) => err ? next(err) : res.render('users/profile', { user: data.user, comments: data.comments }))
-    // return Promise.all([
-    //   User.findByPk(req.params.id, {
-    //     include: [
-    //       { model: Restaurant, as: 'FavoritedRestaurants' },
-    //       { model: User, as: 'Followers' },
-    //       { model: User, as: 'Followings' }
-    //     ]
-    //   }),
-    //   Comment.findAndCountAll({
-    //     include: Restaurant,
-    //     where: { user_id: req.params.id },
-    //     nest: true,
-    //     raw: true
-    //   })
-    // ])
-    //   .then(([user, comments]) => {
-    //     user = {
-    //       ...user.toJSON(),
-    //       favoritedCount: user.FavoritedRestaurants.length,
-    //       followingsCount: user.Followings.length,
-    //       followersCount: user.Followers.length
-    //     }
-    //     res.render('users/profile', { user, comments })
-    //   })
-    //   .catch(err => next(err))
   },
   editUser: (req, res, next) => {
-    return User.findByPk(req.params.id, {
-      raw: true
-    })
-      .then(user => {
-        if (!user) throw new Error('沒這人')
-        res.render('users/edit', { user })
-      })
-      .catch(err => next(err))
+    userServices.editUser(req, (err, data) => err ? next(err) : res.render('users/edit', data))
+    // return User.findByPk(req.params.id, {
+    //   raw: true
+    // })
+    //   .then(user => {
+    //     if (!user) throw new Error('沒這人')
+    //     res.render('users/edit', { user })
+    //   })
+    //   .catch(err => next(err))
   },
   putUser: (req, res, next) => {
     if (req.user.id !== Number(req.params.id)) throw new Error('不要改別人的')

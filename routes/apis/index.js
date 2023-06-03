@@ -8,6 +8,7 @@ const passport = require('../../config/passport')
 const userController = require('../../controllers/apis/user-controller')
 const { authenticated, authenticatedAdmin } = require('../../middleware/api-auth')
 const commentController = require('../../controllers/apis/comment-controller')
+// const upload = require('../../middleware/multer')
 
 // admin
 router.use('/admin', authenticated, authenticatedAdmin, admin)
@@ -16,9 +17,11 @@ router.use('/admin', authenticated, authenticatedAdmin, admin)
 router.get('/signup', userController.signUpPage) // 居然要放post前面  神奇
 router.get('/signin', userController.signInPage)
 router.get('/logout', userController.logout)
+router.get('/users/:id/edit', authenticated, userController.editUser)
 router.get('/users/:id', authenticated, userController.getUser)
 router.post('/signin', passport.authenticate('local', { session: false }), userController.signIn) // 新增這行，設定 session: false
 router.post('/signup', userController.signUp)
+// router.put('/users/:id', authenticated, upload.single('image'), userController.putUser)
 
 // Restaurant
 router.get('/restaurants/top', restController.getTopRestaurants)

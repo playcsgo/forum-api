@@ -63,6 +63,16 @@ const userServices = {
         cb(null, { user, comments })
       })
       .catch(err => cb(err))
+  },
+  editUser: (req, cb) => {
+    return User.findByPk(req.params.id, {
+      raw: true
+    })
+      .then(user => {
+        if (!user) throw new Error('沒這人')
+        cb(null, { user })
+      })
+      .catch(err => cb(err))
   }
 }
 
