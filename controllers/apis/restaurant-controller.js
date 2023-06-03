@@ -10,6 +10,9 @@ const restaurantColler = {
   },
   getDashboard: (req, res, next) => {
     restaurantServices.getDashboard(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
+  },
+  getFeeds: (req, res, next) => {
+    restaurantServices.getFeeds(req, (err, data) => err ? next(err) : res.json({ status: 'success', data }))
   }
 }
 

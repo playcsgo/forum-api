@@ -20,26 +20,27 @@ const restaurantColler = {
     })
   },
   getFeeds: (req, res, next) => {
-    return Promise.all([
-      Restaurant.findAll({
-        limit: 10,
-        order: [['createdAt', 'DESC']], // DESC ASC
-        include: [Category],
-        raw: true,
-        nest: true
-      }),
-      Comment.findAll({
-        limit: 10,
-        order: [['createdAt', 'DESC']],
-        include: [User, Restaurant],
-        raw: true,
-        nest: true
-      })
-    ])
-      .then(([restaurants, comments]) => {
-        res.render('feeds', { restaurants, comments })
-      })
-      .catch(err => next(err))
+    restaurantServices.getFeeds(req, (err, data) => err ? next(err) : res.render('feeds', { restaurants: data.restaurants, comments: data.comments }))
+    // return Promise.all([
+    //   Restaurant.findAll({
+    //     limit: 10,
+    //     order: [['createdAt', 'DESC']], // DESC ASC
+    //     include: [Category],
+    //     raw: true,
+    //     nest: true
+    //   }),
+    //   Comment.findAll({
+    //     limit: 10,
+    //     order: [['createdAt', 'DESC']],
+    //     include: [User, Restaurant],
+    //     raw: true,
+    //     nest: true
+    //   })
+    // ])
+    //   .then(([restaurants, comments]) => {
+    //     res.render('feeds', { restaurants, comments })
+    //   })
+    //   .catch(err => next(err))
   },
   getTopRestaurants: (req, res, next) => {
     return Restaurant.findAll({
