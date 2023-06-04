@@ -40,6 +40,7 @@ router.delete('/comments/:id', authenticated, commentController.deleteComment)
 
 // Like
 router.post('/like/:restaurantId', authenticated, userController.addLike)
+router.delete('/like/:restaurantId', authenticated, userController.removeLike)
 
 // admin Error Handler
 router.use('/', apiErrorHandler)

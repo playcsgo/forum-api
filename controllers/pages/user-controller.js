@@ -1,5 +1,5 @@
 // const bcrypt = require('bcryptjs')
-const { User, Like, Followship } = require('../../models')
+const { User, Followship } = require('../../models')
 const userServices = require('../../services/user-services')
 const userController = {
   signUpPage: (req, res) => {
@@ -57,20 +57,7 @@ const userController = {
     userServices.addLike(req, (err, data) => err ? next(err) : res.redirect('back'))
   },
   removeLike: (req, res, next) => {
-    const restaurantId = Number(req.params.restaurantId)
-    const userId = req.user.id
-    return Like.findOne({
-      where: {
-        restaurantId,
-        userId
-      }
-    })
-      .then(like => {
-        if (!like) throw new Error('刪空氣?')
-        return like.destroy()
-      })
-      .then(() => res.redirect('back'))
-      .catch(err => (err))
+    userServices.removeLike(req, (err, data) => err ? next(err) : res.redirect('back'))
   },
   getTopUsers: (req, res, next) => {
     return User.findAll({

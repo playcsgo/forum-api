@@ -153,6 +153,22 @@ const userServices = {
       })
       .then(createLike => cb(null, { createLike }))
       .catch(err => cb(err))
+  },
+  removeLike: (req, cb) => {
+    const restaurantId = Number(req.params.restaurantId)
+    const userId = req.user.id
+    return Like.findOne({
+      where: {
+        restaurantId,
+        userId
+      }
+    })
+      .then(like => {
+        if (!like) throw new Error('刪空氣?')
+        return like.destroy()
+      })
+      .then(removedLike => cb(null, { removedLike }))
+      .catch(err => cb(err))
   }
 }
 
