@@ -169,6 +169,22 @@ const userServices = {
       })
       .then(removedLike => cb(null, { removedLike }))
       .catch(err => cb(err))
+  },
+  getTopUsers: (req, cb) => {
+    return User.findAll({
+      include: [{ model: User, as: 'Followers' }]
+    })
+    // 使用const result = xxxx  而不直接拿回傳users做處理 可以保留原始的資料
+      .then(users => {
+        const result = users.map(user => ({
+          ...user.toJSON(),
+          followerCount: user.Followers.length,
+          isFollowed: req.user.Followings.some(f => f.id === user.id)
+        }))
+          .sort((a, b) => b.followerCount - a.followerCount)
+        cb(null, { users: result })
+      })
+      .catch(err => cb(err))
   }
 }
 

@@ -14,6 +14,7 @@ const upload = require('../../middleware/multer')
 router.use('/admin', authenticated, authenticatedAdmin, admin)
 
 // User
+router.get('/users/top', authenticated, userController.getTopUsers)
 router.get('/signup', userController.signUpPage) // 居然要放post前面  神奇
 router.get('/signin', userController.signInPage)
 router.get('/logout', userController.logout)

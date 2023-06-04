@@ -60,20 +60,21 @@ const userController = {
     userServices.removeLike(req, (err, data) => err ? next(err) : res.redirect('back'))
   },
   getTopUsers: (req, res, next) => {
-    return User.findAll({
-      include: [{ model: User, as: 'Followers' }]
-    })
-    // 使用const result = xxxx  而不直接拿回傳users做處理 可以保留原始的資料
-      .then(users => {
-        const result = users.map(user => ({
-          ...user.toJSON(),
-          followerCount: user.Followers.length,
-          isFollowed: req.user.Followings.some(f => f.id === user.id)
-        }))
-          .sort((a, b) => b.followerCount - a.followerCount)
-        res.render('top-users', { users: result })
-      })
-      .catch(err => next(err))
+    userServices.getTopUsers(req, (err, data) => err ? next(err) : res.render('top-users', { users: data.users }))
+    // return User.findAll({
+    //   include: [{ model: User, as: 'Followers' }]
+    // })
+    // // 使用const result = xxxx  而不直接拿回傳users做處理 可以保留原始的資料
+    //   .then(users => {
+    //     const result = users.map(user => ({
+    //       ...user.toJSON(),
+    //       followerCount: user.Followers.length,
+    //       isFollowed: req.user.Followings.some(f => f.id === user.id)
+    //     }))
+    //       .sort((a, b) => b.followerCount - a.followerCount)
+    //     res.render('top-users', { users: result })
+    //   })
+    //   .catch(err => next(err))
   },
   // 追蹤功能
   addFollowing: (req, res, next) => {
