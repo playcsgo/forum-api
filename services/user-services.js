@@ -1,4 +1,4 @@
-const { User, Restaurant, Comment, Favorite } = require('../models')
+const { User, Restaurant, Comment, Favorite, Like } = require('../models')
 const bcrypt = require('bcryptjs')
 const { imgurFileHandler } = require('../helpers/file-helpers')
 
@@ -135,6 +135,23 @@ const userServices = {
         req.flash('success_message', '已移除我的最愛')
         cb(null, { removedFavorite })
       })
+      .catch(err => cb(err))
+  },
+  addLike: (req, cb) => {
+    const restaurantId = Number(req.params.restaurantId)
+    const userId = req.user.id
+    return Promise.all([
+      Restaurant.findByPk(restaurantId),
+      Like.findOne({
+        where: { userId, restaurantId }
+      })
+    ])
+      .then(([restaurant, like]) => {
+        if (!restaurant) throw new Error('加空氣?')
+        if (like) throw new Error('要like幾次?')
+        return Like.create({ userId, restaurantId })
+      })
+      .then(createLike => cb(null, { createLike }))
       .catch(err => cb(err))
   }
 }

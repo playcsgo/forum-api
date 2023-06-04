@@ -38,6 +38,9 @@ router.get('/restaurants', authenticated, restController.getRestaurants)
 router.post('/comments', authenticated, commentController.postComment)
 router.delete('/comments/:id', authenticated, commentController.deleteComment)
 
+// Like
+router.post('/like/:restaurantId', authenticated, userController.addLike)
+
 // admin Error Handler
 router.use('/', apiErrorHandler)
 
