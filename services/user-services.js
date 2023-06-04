@@ -206,6 +206,20 @@ const userServices = {
       })
       .then(createdFollowship => cb(null, { createdFollowship }))
       .catch(err => cb(err))
+  },
+  removeFollowing: (req, cb) => {
+    return Followship.findOne({
+      where: {
+        followerId: req.user.id,
+        followingId: req.params.userId
+      }
+    })
+      .then(followship => {
+        if (!followship) throw new Error('刪空氣?')
+        return followship.destroy()
+      })
+      .then(removedFollow => cb(null, { removedFollow }))
+      .catch(err => cb(err))
   }
 }
 

@@ -45,8 +45,9 @@ router.delete('/like/:restaurantId', authenticated, userController.removeLike)
 
 // Following
 router.post('/following/:userId', authenticated, userController.addFollowing)
+router.delete('/following/:userId', authenticated, userController.removeFollowing)
 
-// admin Error Handler
+// Error Handler
 router.use('/', apiErrorHandler)
 
 module.exports = router
