@@ -1,5 +1,5 @@
 // const bcrypt = require('bcryptjs')
-const { User, Restaurant, Favorite, Like, Followship } = require('../../models')
+const { User, Restaurant, Like, Followship } = require('../../models')
 const userServices = require('../../services/user-services')
 const userController = {
   signUpPage: (req, res) => {
@@ -47,21 +47,11 @@ const userController = {
     userServices.addFavorite(req, (err, data) => err ? next(err) : res.redirect('back'))
   },
   removeFavorite: (req, res, next) => {
-    return Favorite.findOne({
-      where: {
-        userId: req.user.id,
-        restaurantId: req.params.restaurantId
-      }
+    userServices.removeFavorite(req, (err, data) => {
+      if (err) return next(err)
+      req.flash('success_message', '已移除我的最愛')
+      res.redirect('back')
     })
-      .then(favorite => {
-        if (!favorite) throw new Error('刪空氣?')
-        return favorite.destroy()
-      })
-      .then(() => {
-        req.flash('success_message', '已移除我的最愛')
-        res.redirect('back')
-      })
-      .catch(err => next(err))
   },
   addLike: (req, res, next) => {
     const restaurantId = Number(req.params.restaurantId)

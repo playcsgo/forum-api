@@ -25,6 +25,7 @@ router.put('/users/:id', authenticated, upload.single('image'), userController.p
 
 // Favorites
 router.post('/favorite/:restaurantId', authenticated, userController.addFavorite)
+router.delete('/favorite/:restaurantId', authenticated, userController.removeFavorite)
 
 // Restaurant
 router.get('/restaurants/top', restController.getTopRestaurants)

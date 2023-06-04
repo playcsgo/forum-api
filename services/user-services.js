@@ -119,6 +119,23 @@ const userServices = {
       })
       .then(createdFavorite => cb(null, { createdFavorite }))
       .catch(err => cb(err))
+  },
+  removeFavorite: (req, cb) => {
+    return Favorite.findOne({
+      where: {
+        userId: req.user.id,
+        restaurantId: req.params.restaurantId
+      }
+    })
+      .then(favorite => {
+        if (!favorite) throw new Error('刪空氣?')
+        return favorite.destroy()
+      })
+      .then(removedFavorite => {
+        req.flash('success_message', '已移除我的最愛')
+        cb(null, { removedFavorite })
+      })
+      .catch(err => cb(err))
   }
 }
 
