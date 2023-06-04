@@ -1,4 +1,4 @@
-const { User, Restaurant, Comment, Favorite, Like } = require('../models')
+const { User, Restaurant, Comment, Favorite, Like, Followship } = require('../models')
 const bcrypt = require('bcryptjs')
 const { imgurFileHandler } = require('../helpers/file-helpers')
 
@@ -184,6 +184,27 @@ const userServices = {
           .sort((a, b) => b.followerCount - a.followerCount)
         cb(null, { users: result })
       })
+      .catch(err => cb(err))
+  },
+  addFollowing: (req, cb) => {
+    return Promise.all([
+      User.findByPk(req.params.userId),
+      Followship.findOne({
+        where: {
+          followerId: req.user.id, // 自己就是A
+          followingId: req.params.userId
+        }
+      })
+    ])
+      .then(([user, followship]) => {
+        if (!user) throw new Error('沒這人')
+        if (followship) throw new Error('跟蹤狂喔')
+        return Followship.create({
+          followerId: req.user.id,
+          followingId: req.params.userId
+        })
+      })
+      .then(createdFollowship => cb(null, { createdFollowship }))
       .catch(err => cb(err))
   }
 }
